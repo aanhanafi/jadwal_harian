@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Harian Responsif</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px; /* Spasi antar section */
+            margin: 30px;
+        }
+
+        .section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        h2, h3 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        ol {
+            margin-left: 20px;
+        }
+
+        .section ul li ol li {
+            margin-bottom: 5px;
+        }
+
+        .section ul li ol {
+            list-style-type: decimal;
+        }
+        /*Gambaran Perkembangan*/
+        .gambaran-item {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            color: #333;
+        }
+
+        /* Menambahkan tanda urut (-) di depan tiap list item */
+        .gambaran-item ul {
+            list-style-type: none; /* Menghapus bullet default */
+            padding-left: 0;
+        }
+
+        .gambaran-item ul li {
+            position: relative; /* Posisi relatif agar kita bisa menambahkan konten sebelum item */
+            padding-left: 25px; /* Memberi ruang untuk tanda urut */
+        }
+
+        .gambaran-item ul li::before {
+            content: "- "; /* Menambahkan tanda urut sebelum teks */
+            position: absolute; /* Agar tanda urut tidak mengganggu teks */
+            left: 0;
+            top: 0;
+            color: #333; /* Menyesuaikan warna tanda urut */
+        }
+
+        /*JADWAL*/
+        .jadwal-section {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.jadwal-section:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.jadwal-section h1, .jadwal-section h4 {
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+}
+
+.jadwal-section ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.jadwal-section li {
+    font-size: 1em;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.jadwal-section li:before {
+    content: "- ";
+    color: #008cba;  /* Memberikan warna biru pada tanda - */
+    font-weight: bold;
+}
+/*warna stabilo dijadwal*/
+.highlight {
+    text-decoration-color: red; /* Menentukan warna coretan */
+    background-color: #ff6347; /* Memberikan warna latar belakang seperti stabilo (merah stabilo) */
+    padding: 0 5px; /* Memberikan sedikit ruang di sekitar teks agar stabilo terlihat lebih baik */
+    color: black; /* Mengubah warna teks agar kontras dengan stabilo */
+}
+
+/* Styling untuk target mingguan */
+.target-week {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Memberikan jarak antar item */
+}
+
+.target-item {
+    background-color: #f7f7f7; /* Warna latar belakang terang untuk kotak */
+    padding: 15px;
+    border-radius: 8px; /* Sudut melengkung untuk membuat kotak lebih modern */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Menambahkan efek bayangan untuk memberi kesan mengambang */
+    border-left: 5px solid #cccccc; /* Garis tepi kiri berwarna biru untuk menambah aksen */
+}
+
+.target-item h4 {
+    color: #212529; /* Warna teks judul menggunakan biru */
+    margin-bottom: 10px; /* Memberikan jarak antara judul dan daftar */
+}
+
+.target-item ol {
+    padding-left: 20px; /* Memberikan jarak kiri pada list */
+    list-style-type: decimal; /* Menampilkan nomor urut */
+}
+
+.target-item ol li {
+    margin-bottom: 8px; /* Memberikan jarak antar item dalam list */
+}
+
+/* Styling untuk rutinitas harian */
+.routine {
+    display: flex;
+    justify-content: space-between; /* Agar tiap box terdistribusi dengan rapi */
+    gap: 20px; /* Memberikan jarak antar box */
+    flex-wrap: wrap; /* Agar tampilan tetap rapi pada ukuran layar kecil */
+}
+
+.routine-item {
+    background-color: #f7f7f7; /* Warna latar belakang terang untuk kotak */
+    padding: 15px;
+    border-radius: 8px; /* Sudut melengkung untuk memberi tampilan lebih modern */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efek bayangan */
+    border-left: 5px solid #cccccc; /* Garis tepi kiri berwarna biru */
+    border-right: 5px solid #cccccc;
+    width: 30%; /* Lebar kotak, agar tiga kotak dalam satu baris */
+    min-width: 250px; /* Menjaga agar kotak tetap responsif pada ukuran kecil */
+}
+
+.routine-item h4 {
+    color: #212529; /* Warna teks judul menggunakan biru */
+    margin-bottom: 10px; /* Memberikan jarak antara judul dan daftar */
+}
+
+.routine-item ol {
+    padding-left: 20px; /* Memberikan jarak kiri pada list */
+    list-style-type: decimal; /* Menampilkan nomor urut */
+}
+
+.routine-item ol li {
+    margin-bottom: 8px; /* Memberikan jarak antar item dalam list */
+}
+
+/*Motivasi*/
+.motivation-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            padding: 20px 30px;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .motivation-container h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .motivation-container p {
+            color: #34495e;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">Jadwal Harian</h2>
+        <div class="text-center mb-4">
+            <button class="btn btn-primary me-2" onclick="tampilkanJadwal('kuliah')">Hari Kuliah</button>
+            <button class="btn btn-success" onclick="tampilkanJadwal('kosong')">Hari Kosong</button>
+        </div>
+        <div id="jadwal-container">
+            <h3>Silakan pilih jadwal untuk ditampilkan.</h3>
+        </div>
+
+        <!--GAMBARAN PERKEMBANGAN-->
+        <div class="section">
+            <h2>Perkembangan yang Bisa Kamu Harapkan</h2>
+            <p>
+                Yuk, lihat apa yang bisa kamu capai dalam beberapa bulan ke depan dengan perubahan kecil yang konsisten. Dari kebiasaan sehat hingga peningkatan fisik dan mental, semuanya bisa kamu nikmati!
+            </p>
+            
+            <div class="gambaran-item">
+                <h3>Jangka Pendek (0-3 Bulan)</h3>
+                <ul>
+                    <li>Mulai olahraga ringan setiap hari, bahkan hanya stretching atau jalan pagi.</li>
+                    <li>Makan lebih sehat dengan sarapan bergizi dan tubuh terasa lebih bertenaga.</li>
+                    <li>Menciptakan rutinitas tidur yang lebih baik, Kepercayaan diri mulai pulih karena ada rutinitas yang teratur.</li>
+                    <li>Kesehatan fisik membaik sedikit demi sedikit.</li>
+                    <li>Mulai belajar dengan lebih fokus, sedikit demi sedikit belajar hal baru setiap hari.</li>
+                </ul>
+            </div>
+            
+            <div class="gambaran-item">
+                <h3>Jangka Menengah (3-6 Bulan)</h3>
+                <ul>
+                    <li>Energi kamu meningkat, jadi lebih produktif dan gak cepat lelah.</li>
+                    <li>Massa otot mulai kelihatan, apalagi kalau fokus latihan bahu dan tubuh bagian atas.</li>
+                    <li>Kebiasaan ibadah dan aktivitas harian jadi lebih stabil, kamu bisa atur waktu dengan baik.</li>
+                    <li>Kedisiplinan semakin kuat, dan manajemen waktu menjadi lebih terstruktur.</li>
+                    <li>Performa akademik membaik karena pola belajar yang konsisten.</li>
+                    <li>Keterampilan baru semakin banyak, dan fokus belajar makin terjaga.</li>
+                </ul>
+            </div>
+            
+            <div class="gambaran-item">
+                <h3>Jangka Panjang (6-12 Bulan)</h3>
+                <ul>
+                    <li>Rutinitas sudah menjadi kebiasaan yang kokoh.</li>
+                    <li>Kepercayaan diri jauh meningkat, dan fisik lebih sehat serta bugar.</li>
+                    <li>Perubahan fisik yang signifikan! Tubuh makin berisi, lebih kuat, dan lebih percaya diri.</li>
+                    <li>Kamu bakal merasa lebih nyaman dalam berbagai situasi sosial, karena kepercayaan diri yang naik.</li>
+                    <li>Rutinitas harian kamu akan terasa lebih stabil dan produktif.</li>
+                    <li>Keseimbangan mental, fisik, dan spiritual tercapai.</li>
+                    <li>Pencapaian besar! Baik di sisi fisik, mental, dan kemampuan baru yang kamu pelajari.</li>
+                </ul>
+            </div>
+            <p>
+                Perlu diingat bahwa proses ini membutuhkan tekad kuat dan disiplin. Mulailah dengan langkah kecil, dan jangan ragu untuk melakukan evaluasi rutin atas perkembangan Anda. Semoga berhasil dalam perjalanan pengembangan diri Anda!
+            </p>
+        </div>
+
+    <!--TUJUAN SPESIFIK-->
+    <div class="section">
+    <h2>Tujuan Spesifik dan Apa yang Didapat</h2>
+
+    <h3>Jangka Pendek (1-3 Bulan):</h3>
+    <ul>
+        <li><strong>Tujuan:</strong>
+            <ol>
+                <li>Membiasakan diri dengan rutinitas sehat</li>
+                <li>Meningkatkan waktu tidur yang berkualitas</li>
+                <li>Mengurangi konsumsi konten negatif</li>
+                <li>Memulai ibadah rutin</li>
+            </ol>
+        </li>
+        <li><strong>Hasil:</strong>
+            <ol>
+                <li>Peningkatan energi</li>
+                <li>Stabilitas emosi yang lebih baik</li>
+                <li>Kemampuan fokus yang lebih baik</li>
+            </ol>
+        </li>
+    </ul>
+
+    <h3>Jangka Menengah (3-6 Bulan):</h3>
+    <ul>
+        <li><strong>Tujuan:</strong>
+            <ol>
+                <li>Meningkatkan performa akademik</li>
+                <li>Meningkatkan konsistensi berolahraga</li>
+                <li>Memperdalam ibadah</li>
+                <li>Mulai membangun otot dan berat badan</li>
+            </ol>
+        </li>
+        <li><strong>Hasil:</strong>
+            <ol>
+                <li>Tubuh yang lebih sehat dan kuat</li>
+                <li>Kepercayaan diri meningkat</li>
+                <li>Kedisiplinan dalam manajemen waktu</li>
+            </ol>
+        </li>
+    </ul>
+
+    <h3>Jangka Panjang (6-12 Bulan dan Seterusnya):</h3>
+    <ul>
+        <li><strong>Tujuan:</strong>
+            <ol>
+                <li>Mempertahankan pola hidup sehat dan produktif</li>
+                <li>Memperkuat hubungan sosial yang positif</li>
+                <li>Memperdalam keterampilan dan ibadah</li>
+            </ol>
+        </li>
+        <li><strong>Hasil:</strong>
+            <ol>
+                <li>Transformasi fisik dan mental yang signifikan</li>
+                <li>Pengendalian diri yang lebih baik</li>
+                <li>Peningkatan kualitas hidup secara keseluruhan</li>
+            </ol>
+        </li>
+    </ul>
+</div>
+        
+        <p>
+            Dengan mengikuti jadwal ini dan mencapai tujuan spesifik, Anda akan bisa mengatur waktu dengan lebih baik, memperkuat fisik, meningkatkan kepercayaan diri, serta membangun karakter yang lebih disiplin dan tangguh.
+        </p>
+    </div>
+
+    <!-- SOLUSI DAN LANGKAH PRAKTIS -->
+<!-- SOLUSI DAN LANGKAH PRAKTIS -->
+<div class="section">
+    <h2>Solusi dan Langkah Praktis</h2>
+    <h3>Fokus pada Rutinitas Harian:</h3>
+    <div class="routine">
+        <div class="routine-item">
+            <h4>Pagi Hari:</h4>
+            <ol>
+                <li>Prioritaskan bangun pagi</li>
+                <li>Sholat</li>
+                <li>Olahraga ringan</li>
+            </ol>
+        </div>
+        <div class="routine-item">
+            <h4>Siang Hari:</h4>
+            <ol>
+                <li>Gunakan waktu di antara jam kuliah untuk makan sehat</li>
+                <li>Istirahat sejenak</li>
+            </ol>
+        </div>
+        <div class="routine-item">
+            <h4>Malam Hari:</h4>
+            <ol>
+                <li>Lakukan review pelajaran</li>
+                <li>Waktu ibadah malam yang konsisten</li>
+            </ol>
+        </div>
+    </div>
+<br>
+    <h3>Target Mingguan:</h3>
+    <div class="target-week">
+        <div class="target-item">
+            <h4>Rabu dan Kamis (Hari Kosong):</h4>
+            <ol>
+                <li>Gunakan hari ini untuk belajar mandiri</li>
+                <li>Mengerjakan tugas</li>
+                <li>Berolahraga lebih intensif</li>
+                <li>Fokus pada ibadah dan refleksi diri (misalnya membaca atau meditasi)</li>
+            </ol>
+        </div>
+        <div class="target-item">
+            <h4>Sabtu dan Minggu:</h4>
+            <ol>
+                <li>Manfaatkan untuk kegiatan produktif</li>
+                <li>Mengembangkan keterampilan (misalnya coding, membaca buku, atau mengikuti kursus online)</li>
+                <li>Memperbaiki waktu istirahat</li>
+            </ol>
+        </div>
+
+<!--Motivasi-->    
+</div><br>
+    <div class="motivation-container">
+    <p>
+        Ayo, bangun! Sampai kapan mau terus begini? Lihat dirimu sekarang dan bayangkan siapa kamu bisa jadi kalau mulai bertindak. 
+        Setiap hari yang berlalu tanpa perubahan hanya menambah jarak antara dirimu dan potensi terbaikmu.
+<br><br>
+Capek jadi orang yang selalu merasa kalah? Buktikan ke diri sendiri bahwa kamu bisa. 
+Lakukan satu langkah hari ini yang bikin kamu beda dari kemarin.
+ Cukup satu langkah, tapi lakukan terus-menerus. Gak ada lagi alasan, gak ada lagi penundaan. 
+ Hari kosong? Gunakan buat memompa semangat, bukan buat rebahan tanpa arah.
+<br>
+<br>
+Bayangkan dirimu enam bulan ke depan: badan lebih kuat, pikiran lebih tajam, percaya diri muncul bukan karena basa-basi, tapi karena hasil nyata.
+ Kamu bakal jadi orang yang bikin orang lain mikir, “Wow, dia berubah total.” Tapi ini bukan soal orang lain, ini soal kamu. 
+ Soal bangga pas ngaca dan bilang, “Gue berhasil karena gue nggak nyerah.”
+<br>
+<br>
+Setiap kali godaan datang—entah itu menunda belajar, malas olahraga, atau tergoda hal-hal gak berguna—ingat siapa yang paling dirugikan. 
+Dirimu sendiri. Jadi, ubah mindset, ubah kebiasaan. Biar nanti kamu bisa bilang, "Gue dulu kayak gitu, tapi gue bangkit."
+<br>
+<br>
+Mau bukti? Mulai sekarang. Sholat, olahraga, belajar. Gak perlu perfect, yang penting maju.
+ Satu langkah sekarang, seribu langkah lebih dekat sama versi dirimu yang paling hebat. Ayo, ini saatnya!
+    </p>
+    <br>
+    <br>
+    </div>
+</div>
+
+        
+        
+
+    <script>
+        const jadwal = {
+            kuliah: `
+                <div class="jadwal-section">
+                    <h1>Senin-Selasa</h1>
+                    <h4>Pagi Hari (05.00 - 12.00)</h4>
+                    <ul>
+                        <li>05.00 - 05.30: Bangun, minum air putih, dan sholat Subuh.</li>
+                        <li>05.30 - 06.00: Latihan fisik ringan (stretching, plank, squats, atau jalan pagi).</li>
+                        <li>06.00 - 07.00: Sarapan sehat.</li>
+                        <li>07.00 - 08.30: Persiapan kuliah.</li>
+                        <li class="highlight">08.50 - 16.20: Waktu kuliah dengan istirahat tiap 1-2 jam.</li>
+                    </ul>
+                </div>
+                <div class="jadwal-section">
+                    <h4>Siang Hari (12.00 - 15.00)</h4>
+                    <ul>
+                        <li>12.00 - 13.00: Sholat Zuhur dan makan siang ringan.</li>
+                        <li>13.00 - 15.00: Waktu kuliah dengan istirahat tiap 1-2 jam.</li>
+                    </ul>
+                </div>
+                <div class="jadwal-section">
+                    <h4>Sore Hari (15.00 - 18.30)</h4>
+                    <ul>
+                        <li>16.20 - 17.00: Waktu rehat atau tidur siang singkat.</li>
+                        <li>17.00 - 17.30: Sholat Ashar dan latihan fisik ringan.</li>
+                    </ul>
+                </div>
+                <div class="jadwal-section">
+                    <h4>Malam Hari (18.30 - 22.30)</h4>
+                    <ul>
+                        <li>18.30 - 19.30: Sholat Maghrib dan makan malam.</li>
+                        <li>19.30 - 20.00: Sholat Isya.</li>
+                        <li>20.00 - 22.00: Belajar mendalam.</li>
+                        <li>22.00 - 22.30: Relaksasi sebelum tidur.</li>
+                    </ul>
+                </div>
+                <div class="jadwal-section">
+                    <h4>Tidur Malam (22.30 - 05.00)</h4>
+                    <ul>
+                        <li>22.30 - 05.00: Tidur malam.</li>
+                    </ul>
+                </div>
+            `,
+            kosong: `
+                <div class="jadwal-section">
+                    <h4>Pagi Hari (05.00 - 12.00)</h4>
+                    <ul>
+                        <li>05.00 - 05.30: Bangun, minum air putih, dan sholat Subuh.</li>
+                        <li>05.30 - 06.30: Olahraga ringan (jalan cepat, senam, atau yoga).</li>
+                        <li>06.30 - 07.30: Sarapan sehat dan mandi.</li>
+                        <li>07.30 - 09.00: Belajar mandiri (mengulang materi atau belajar keterampilan baru).</li>
+                    </ul>
+                </div>
+                <div class="jadwal-section">
+                    <h4>Siang Hari (12.00 - 15.00)</h4>
+                    <ul>
+                        <li>12.00 - 13.00: Sholat Zuhur dan makan siang.</li>
+                        <li>13.00 - 15.00: Belajar mandiri atau mengerjakan tugas.</li>
+                    </ul>
+                </div>
+                <div class="jadwal-section">
+                    <h4>Sore Hari (15.00 - 18.30)</h4>
+                    <ul>
+                        <li>15.00 - 17.00: Waktu santai, bisa digunakan untuk ibadah tambahan atau membaca.</li>
+                        <li>17.00 - 17.30: Sholat Ashar.</li>
+                        <li>17.30 - 18.30: Olahraga sore.</li>
+                    </ul>
+                </div>
+                <div class="jadwal-section">
+                    <h4>Malam Hari (18.30 - 22.30)</h4>
+                    <ul>
+                        <li>18.30 - 19.30: Makan malam dan sholat Maghrib.</li>
+                        <li>19.30 - 20.30: Waktu luang, bisa digunakan untuk membaca atau melakukan hobi.</li>
+                        <li>20.30 - 22.00: Belajar atau merencanakan aktivitas hari berikutnya.</li>
+                        <li>22.00 - 22.30: Relaksasi dan persiapan tidur.</li>
+                    </ul>
+                </div>
+                <div class="jadwal-section">
+                    <h4>Tidur Malam (22.30 - 05.00)</h4>
+                    <ul>
+                        <li>22.30 - 05.00: Tidur malam.</li>
+                    </ul>
+                </div>
+            `
+        };
+
+        function tampilkanJadwal(jenis) {
+            document.getElementById("jadwal-container").innerHTML = jadwal[jenis];
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
